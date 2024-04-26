@@ -6,10 +6,14 @@ const socketIo = require('socket.io');
 
 //import custom files
 const connectDB = require('./Database/Connection.js')
-const dotenv = require('dotenv')
+const dotenv = require('dotenv');
+const authRouter = require('./Routes/Auth/AuthRoutes.js');
+
+
 
 // Initialize Express app
 const app = express();
+app.use(express.json())
 dotenv.config()
 const server = http.createServer(app);
 
@@ -18,8 +22,14 @@ const io = socketIo(server);
 
 // Define a route in Express
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  res.json({
+    successs : true,
+    message : "Server is running Fine :)"
+  })
 });
+
+//custom routes
+app.use('/api/auth',authRouter)
 
 // Socket.IO logic
 io.on('connection', (socket) => {
